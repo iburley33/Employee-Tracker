@@ -14,35 +14,35 @@ const db = mysql.createConnection(
 
 
 const createRoles = () => {
-      inquirer
+    inquirer
       .prompt([
         {
           type: 'input',
-          message: 'What is the first name of the employee?',
+          message: 'What is the new title you would like to add?',
           name: 'title',
         },
         {
           type: 'input',
-          message: 'What is the last name of the employee?',
+          message: 'What is the salary of this role?',
           name: 'salary',
         },
         {
           type: 'input',
-          message: 'What is the role id of the employee?',
+          message: 'What is the department id of the department this role belongs to?',
           name: 'department',
         },
       ])
       .then((answers) => {
-      const first_name = answers.fname;
-      const last_name = answers.lname;
-      const role_id = answers.roleid;
+      const title = answers.title;
+      const salary = answers.salary;
+      const department = answers.department;
 
-      const sql = `INSERT INTO employee_data (first_name, last_name, role_id, manager_id) VALUES ('${first_name}', '${last_name}', ${role_id}, ${manager_id})`;
+      const sql = `INSERT INTO roles (title, salary, department_id) VALUES ('${title}', ${salary}, ${department})`;
   
       db.query(sql, (err, result) => {
         console.log(result);
         console.log(err);
-        console.log(`Added ${first_name} to the database`);
+        console.log(`Added ${title} to the database`);
         beginPrompt()
       }); 
     })
@@ -56,7 +56,7 @@ const viewRoles = () => {
 };
 
 const createEmployees = () => {
-      inquirer
+    inquirer
       .prompt([
         {
           type: 'input',
@@ -133,9 +133,37 @@ const viewDept = () => {
   });
 };
 
-/*const updateRole = () => {
-  
-}*/
+const updateRole = () => {
+  inquirer
+  .prompt([
+    {
+      type: 'input',
+      message: 'Enter the employee ID of the employee whose role will be changed.',
+      name: 'employee',
+    },
+    {
+      type: 'input',
+      message: 'Please enter the role ID of the employees new role.',
+      name: 'newRole',
+    },
+    
+  ])
+  .then((answers) => {
+  const emp = answers.employee;
+  const newRole = answers.newRole;
+
+  const sql = `UPDATE employee_data SET role_id = ? WHERE id = ?`
+  const params = [newRole, emp]
+  db.query(sql, params, (err, result) => {
+      if (err) {
+          console.error(err)
+      } else {
+          beginPrompt();
+      }
+  }); 
+})
+
+}
 
 const beginPrompt = () => {
     inquirer
@@ -170,5 +198,3 @@ const beginPrompt = () => {
     };
 
     beginPrompt();
-     // switch statement
-     // else if
