@@ -162,8 +162,8 @@ const updateRole = () => {
       }
   }); 
 })
-
 }
+
 
 const beginPrompt = () => {
     inquirer
@@ -192,7 +192,7 @@ const beginPrompt = () => {
           } if(answers.action === 'Update Employee Role'){
             updateRole()
           } if(answers.action === 'Exit') {
-            return exit
+            return process.exit()
           };
         });
     };
